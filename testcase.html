@@ -1,0 +1,84 @@
+<html>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+    <script src="M_taxRate.js"></script>
+    <script src="M_productCategories.js"></script>
+    <script src="View.js"></script>
+    <script src="script.js"></script>
+    <script>
+        testCase = function() {
+            var testDatas = [{
+                    code: 'Location: CA, 1 book at 17.99, 1 potato chips at 3.99',
+                    tax: '$1.80',
+                    subtotal: '$21.98',
+                    total: '$23.78'
+                }, {
+                    code: 'Location: NY, 1 book at 17.99, 3 pencils at 2.99',
+                    tax: '$2.40',
+                    subtotal: '$26.96',
+                    total: '$29.36'
+                }, {
+                    code: 'Location: NY, 2 pencils at 2.99, 1 shirt at 29.99',
+                    tax: '$0.55',
+                    subtotal: '$35.97',
+                    total: '$36.52'
+
+                }
+
+            ];
+
+            result = testDatas.map(function(td) {
+                appendHtml('<br>Test:' + td.code);
+                var r = runTest(td);
+            });
+
+        }
+        runTest = function(td) {
+            inputCode = td.code;
+            inputData = Command.getData(inputCode);
+            var tax = getTax(inputData);
+
+            var ReceiptData = {
+                item: inputData.products,
+                tax: getTax(inputData),
+            }
+            ReceiptData.subtotal = View.getSubtotal(ReceiptData.item);
+            ReceiptData.total = ReceiptData.subtotal + ReceiptData.tax;
+            var context = View.formatData(ReceiptData);
+
+
+            if (context.tax == td.tax) {
+                appendHtml('pass tax');
+            } else {
+                appendHtml('err tax', td);
+            }
+
+            if (context.subtotal == td.subtotal) {
+                appendHtml('pass subtotal');
+            } else {
+                appendHtml('err tax', td);
+            }
+
+            if (context.total == td.total) {
+                appendHtml('pass total');
+            } else {
+                appendHtml('err tax', td);
+            }
+
+
+        }
+
+        appendHtml = function(t, data) {
+            $('body').append(t + '<br>');
+
+        }
+
+        $(document).ready(function() {
+            testCase();
+        });
+    </script>
+</body>
+
+</html>

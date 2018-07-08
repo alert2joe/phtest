@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <h2>Link:</h2>
+    <a href='receipt.html'>Home</a>
+    <br>
+    <a href='receipt.html?inputCode=Location: CA, 1 book at 17.99, 1 potato chips at 3.99'>Location: CA, 1 book at 17.99, 1 potato chips at 3.99</a>
+    <br>
+    <a href='receipt.html?inputCode=Location: NY, 1 book at 17.99, 3 pencils at 2.99'>Location: NY, 1 book at 17.99, 3 pencils at 2.99</a>
+    <br>
+    <a href='receipt.html?inputCode=Location: NY, 2 pencils at 2.99, 1 shirt at 29.99'>Location: NY, 2 pencils at 2.99, 1 shirt at 29.99</a>
+    <br>
+
+    <script id="entry-template" type="text/x-handlebars-template">
+        <div class="container border">
+            <div class="row text-center bg-secondary border-bottom">
+                <div class="col-sm">
+                    item
+                </div>
+                <div class="col-sm">
+                    price
+                </div>
+                <div class="col-sm">
+                    qty
+                </div>
+            </div>
+            {{#each item}}
+            <div class="row products border-bottom">
+                <div class="col-sm">
+                    {{code}}
+                </div>
+                <div class="col-sm text-right">
+                    {{price}}
+                </div>
+                <div class="col-sm text-right">
+                    {{qty}}
+                </div>
+            </div>
+            {{/each}}
+            <div class="row products border-bottom">
+                <div class="col-sm">
+                    subtotal
+                </div>
+                <div class="col-sm text-right">
+                    {{subtotal}}
+                </div>
+            </div>
+            <div class="row products border-bottom">
+                <div class="col-sm">
+                    tax
+                </div>
+                <div class="col-sm text-right">
+                    {{tax}}
+                </div>
+            </div>
+            <div class="row products border-bottom">
+                <div class="col-sm">
+                    total
+                </div>
+                <div class="col-sm text-right">
+                    {{total}}
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <div id='Receipt'></div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
+    <script src="M_taxRate.js"></script>
+    <script src="M_productCategories.js"></script>
+    <script src="View.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function main(inputCode) {
+            var inputData = Command.getData(inputCode);
+
+            if (inputData === false) {
+                View.renderErr(ReceiptData);
+                return false;
+            }
+
+            var ReceiptData = {
+                item: inputData.products,
+                tax: getTax(inputData),
+            }
+            View.render(ReceiptData);
+        }
+        var inputCode = Common.urlParam('inputCode');
+        if (inputCode) {
+            main(inputCode);
+        }
+    </script>
+
+
+
+</body>
+
+</html>
